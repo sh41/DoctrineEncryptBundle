@@ -2,8 +2,10 @@
 
 namespace Ambta\DoctrineEncryptBundle\Encryptors;
 
-use \ParagonIE\Halite\HiddenString;
-use \ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Alerts\CannotPerformOperation;
+use ParagonIE\HiddenString\HiddenString;
+use ParagonIE\Halite\KeyFactory;
+use ParagonIE\Halite\Symmetric\Crypto;
 
 /**
  * Class for encrypting and decrypting with the halite library
@@ -29,7 +31,7 @@ class HaliteEncryptor implements EncryptorInterface
      */
     public function encrypt($data)
     {
-        return \ParagonIE\Halite\Symmetric\Crypto::encrypt(new HiddenString($data), $this->getKey());
+        return Crypto::encrypt(new HiddenString($data), $this->getKey());
     }
 
     /**
@@ -37,7 +39,7 @@ class HaliteEncryptor implements EncryptorInterface
      */
     public function decrypt($data)
     {
-        $data = \ParagonIE\Halite\Symmetric\Crypto::decrypt($data, $this->getKey());
+        $data = Crypto::decrypt($data, $this->getKey());
 
         if ($data instanceof HiddenString)
         {
@@ -51,10 +53,10 @@ class HaliteEncryptor implements EncryptorInterface
     {
         if ($this->encryptionKey === null) {
             try {
-                $this->encryptionKey = \ParagonIE\Halite\KeyFactory::loadEncryptionKey($this->keyFile);
-            } catch (\ParagonIE\Halite\Alerts\CannotPerformOperation $e) {
+                $this->encryptionKey = KeyFactory::loadEncryptionKey($this->keyFile);
+            } catch (CannotPerformOperation $e) {
                 $this->encryptionKey = KeyFactory::generateEncryptionKey();
-                \ParagonIE\Halite\KeyFactory::save($this->encryptionKey, $this->keyFile);
+                KeyFactory::save($this->encryptionKey, $this->keyFile);
             }
         }
 

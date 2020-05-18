@@ -56,9 +56,9 @@ Filename example: `.DefuseEncryptor.key` or `.HaliteEncryptor.key`
 
 ### Documentation
 
-* [Installation](Resources/doc/installation.md)
-* [Requirements](Resources/doc/installation.md#requirements)
-* [Configuration](Resources/doc/configuration.md)
-* [Usage](Resources/doc/usage.md)
-* [Console commands](Resources/doc/commands.md)
-* [Custom encryption class](Resources/doc/custom_encryptor.md)
+* [Installation](src/Resources/doc/installation.md)
+* [Requirements](src/Resources/doc/installation.md#requirements)
+* [Configuration](src/Resources/doc/configuration.md)
+* [Usage](src/Resources/doc/usage.md)
+* [Console commands](src/Resources/doc/commands.md)
+* [Custom encryption class](src/Resources/doc/custom_encryptor.md)

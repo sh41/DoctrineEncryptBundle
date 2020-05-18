@@ -1,6 +1,6 @@
 <?php
 
-namespace Ambta\DoctrineEncryptBundle\Tests\Unit\DependencyInjection;
+namespace Ambta\DoctrineEncryptBundle\Tests\Unit\Encryptors;
 
 use Ambta\DoctrineEncryptBundle\Encryptors\DefuseEncryptor;
 use PHPUnit\Framework\TestCase;

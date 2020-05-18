@@ -8,12 +8,11 @@ use Ambta\DoctrineEncryptBundle\Subscribers\DoctrineEncryptSubscriber;
 use Ambta\DoctrineEncryptBundle\Tests\Unit\Subscribers\fixtures\ExtendedUser;
 use Ambta\DoctrineEncryptBundle\Tests\Unit\Subscribers\fixtures\User;
 use Ambta\DoctrineEncryptBundle\Tests\Unit\Subscribers\fixtures\WithUser;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\SimpleAnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -194,7 +193,7 @@ class DoctrineEncryptSubscriberTest extends TestCase
     /**
      * Test that fields are encrypted before flushing.
      */
-    public function testPreFlush()
+    public function testOnFlush()
     {
         $user = new User('David', 'Switzerland');
 
@@ -208,9 +207,13 @@ class DoctrineEncryptSubscriberTest extends TestCase
             ->method('getUnitOfWork')
             ->willReturn($uow)
         ;
-        $preFlush = new PreFlushEventArgs($em);
+        $classMetaData = $this->createMock(ClassMetadata::class);
+        $em->expects($this->once())->method('getClassMetadata')->willReturn($classMetaData);
+        $uow->expects($this->once())->method('recomputeSingleEntityChangeSet');
 
-        $this->subscriber->preFlush($preFlush);
+        $onFlush = new OnFlushEventArgs($em);
+
+        $this->subscriber->onFlush($onFlush);
 
         $this->assertStringStartsWith('encrypted-', $user->name);
         $this->assertStringStartsWith('encrypted-', $user->getAddress());
